@@ -169,6 +169,18 @@ public class ApiController {
                 }
             }
    }
+    @GetMapping("/goods/like") //商品 id 名字 主图 价格
+    public List<GoodsValuable> findLike(@RequestParam Long goods_store_id,@RequestParam String word){
+        List<Goods> goods=goodsDao.findByGoods_store_idAndGoods_nameIsLike(goods_store_id,word);
+        List<GoodsValuable> list=new ArrayList<>();
+        for(Goods goods1:goods){
+            Accessory accessory=accessoryDao.findById(goods1.getGoods_main_photo_id()).orElse(new Accessory());
+            GoodsValuable goodsValuable=new GoodsValuable(goods1.getId(),goods1.getGoods_name(),new ZuTu(accessory.getPath(),accessory.getName(),accessory.getExt()),goods1.getGoods_price());
+            list.add(goodsValuable);
+        }
+
+        return list;
+    }
 
 
 
